@@ -8,8 +8,12 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Percentage from '@/components/ui/Percentage';
 import { memberList } from '@/lib/mocked';
+import usePercentStore from '@/lib/percentage.';
 
 export default function MainPage() {
+  const percentStore = usePercentStore((state) => state.percentList);
+  const clearPercentList = usePercentStore((state) => state.clearPercentList);
+
   const [project, setProject] = useState<{
     id: number;
     repoUrl: string;
@@ -22,6 +26,7 @@ export default function MainPage() {
 
   const [busPosition, setBusPosition] = useState(200);
   const [direction, setDirection] = useState(1);
+  const [userIds, setUserIds] = useState<number[]>([1, 2, 3, 4, 5]);
 
   useEffect(() => {
     fetch('/api/projects', {
@@ -29,6 +34,7 @@ export default function MainPage() {
       headers: { 'Content-Type': 'application/json' }
     }).then((res) => {
       if (res.ok) {
+        clearPercentList();
         res.json().then((data) => {
           setProject(data.data.projects);
         });
@@ -52,6 +58,18 @@ export default function MainPage() {
 
     return () => clearInterval(interval); // 컴포넌트 언마운트 시 interval 정리
   }, [direction]);
+
+  const sortUserIdsByPercentage = (list: any[]): number[] => {
+    // 리스트를 percentage 기준으로 내림차순 정렬
+    const sortedList = list.sort((a, b) => b.percentage - a.percentage);
+    // 정렬된 리스트에서 userId만 추출하여 반환
+    return sortedList.map((item) => item.userId);
+  };
+
+  useEffect(() => {
+    const sortedUserIds = sortUserIdsByPercentage(percentStore);
+    setUserIds(sortedUserIds);
+  }, [percentStore]);
 
   return (
     <Tabs defaultValue="all">
@@ -83,45 +101,185 @@ export default function MainPage() {
               style={{ top: `${busPosition}px` }} // 동적으로 top 값 설정
             />
             <Image
-              src="/bird/driver1.png"
+              src={userIds[0] === 1 ? '/bird/driver1.png' : '/bird/bird1.png'}
               alt="driver"
               width={70}
               height={70}
-              className="absolute left-[510px] transform -translate-x-1/2 -translate-y-1/2"
-              style={{ top: `${busPosition - 45}px` }}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                top: `${busPosition - 45}px`,
+                left:
+                  userIds[0] === 1
+                    ? '510px'
+                    : userIds[1] === 1
+                      ? '670px'
+                      : userIds[2] === 1
+                        ? '830px'
+                        : userIds[3] === 1
+                          ? '990px'
+                          : '1300px'
+              }}
             />
+            <Label
+              className="absolute text-md text-white font-bold"
+              style={{
+                top: `${busPosition - 10}px`,
+                left:
+                  userIds[0] === 1
+                    ? '500px'
+                    : userIds[1] === 1
+                      ? '660px'
+                      : userIds[2] === 1
+                        ? '820px'
+                        : userIds[3] === 1
+                          ? '980px'
+                          : '1200px'
+              }}
+            >
+              예원
+            </Label>
             <Image
-              src="/bird/bird2.png"
+              src={userIds[0] === 2 ? '/bird/driver2.png' : '/bird/bird2.png'}
               alt="bird2"
               width={70}
               height={70}
-              className="absolute left-[670px] transform -translate-x-1/2 -translate-y-1/2"
-              style={{ top: `${busPosition - 45}px` }}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                top: `${busPosition - 45}px`,
+                left:
+                  userIds[0] === 2
+                    ? '510px'
+                    : userIds[1] === 2
+                      ? '670px'
+                      : userIds[2] === 2
+                        ? '830px'
+                        : userIds[3] === 2
+                          ? '990px'
+                          : '1300px'
+              }}
             />
+            <Label
+              className="absolute text-md text-white font-bold"
+              style={{
+                top: `${busPosition - 10}px`,
+                left:
+                  userIds[0] === 2
+                    ? '500px'
+                    : userIds[1] === 2
+                      ? '660px'
+                      : userIds[2] === 2
+                        ? '820px'
+                        : userIds[3] === 2
+                          ? '980px'
+                          : '1200px'
+              }}
+            >
+              현택
+            </Label>
             <Image
-              src="/bird/bird3.png"
+              src={userIds[0] === 3 ? '/bird/driver3.png' : '/bird/bird3.png'}
               alt="bird3"
               width={70}
               height={70}
-              className="absolute left-[830px] transform -translate-x-1/2 -translate-y-1/2"
-              style={{ top: `${busPosition - 45}px` }}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                top: `${busPosition - 45}px`,
+                left:
+                  userIds[0] === 3
+                    ? '510px'
+                    : userIds[1] === 3
+                      ? '670px'
+                      : userIds[2] === 3
+                        ? '830px'
+                        : userIds[3] === 3
+                          ? '990px'
+                          : '1300px'
+              }}
             />
+            <Label
+              className="absolute text-md text-white font-bold"
+              style={{
+                top: `${busPosition - 10}px`,
+                left:
+                  userIds[0] === 3
+                    ? '500px'
+                    : userIds[1] === 3
+                      ? '660px'
+                      : userIds[2] === 3
+                        ? '820px'
+                        : userIds[3] === 3
+                          ? '980px'
+                          : '1200px'
+              }}
+            >
+              유빈
+            </Label>
             <Image
-              src="/bird/bird4.png"
+              src={userIds[0] === 4 ? '/bird/driver4.png' : '/bird/bird4.png'}
               alt="bird4"
               width={70}
               height={70}
-              className="absolute left-[990px] transform -translate-x-1/2 -translate-y-1/2"
-              style={{ top: `${busPosition - 45}px` }}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                top: `${busPosition - 45}px`,
+                left:
+                  userIds[0] === 4
+                    ? '510px'
+                    : userIds[1] === 4
+                      ? '670px'
+                      : userIds[2] === 4
+                        ? '830px'
+                        : userIds[3] === 4
+                          ? '990px'
+                          : '1300px'
+              }}
             />
+            <Label
+              className="absolute text-md text-white font-bold"
+              style={{
+                top: `${busPosition - 10}px`,
+                left:
+                  userIds[0] === 4
+                    ? '500px'
+                    : userIds[1] === 4
+                      ? '660px'
+                      : userIds[2] === 4
+                        ? '820px'
+                        : userIds[3] === 4
+                          ? '980px'
+                          : '1200px'
+              }}
+            >
+              승겸
+            </Label>
             <Image
-              src="/bird/pm.png"
+              src={'/bird/pm.png'}
               alt="pm"
               width={70}
               height={70}
               className="absolute left-[1300px] transform -translate-x-1/2 -translate-y-1/2"
-              style={{ top: `${busPosition + 45}px` }}
+              style={{
+                top: `${busPosition + 45}px`
+              }}
             />
+            <Label
+              className="absolute text-md text-white font-bold"
+              style={{
+                top: `${busPosition + 70}px`,
+                left:
+                  userIds[0] === 5
+                    ? '505px'
+                    : userIds[1] === 5
+                      ? '665px'
+                      : userIds[2] === 5
+                        ? '825px'
+                        : userIds[3] === 5
+                          ? '985px'
+                          : '1295px'
+              }}
+            >
+              영준
+            </Label>
           </div>
 
           <div className="flex-1 bg-gray-200 rounded-full h-4 mt-3">
