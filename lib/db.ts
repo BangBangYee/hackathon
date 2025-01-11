@@ -33,6 +33,14 @@ export async function getProjects(id: number): Promise<SelectProjects[]> {
   return db.select().from(projects).where(eq(projects.id, id));
 }
 
+export async function getProjectsByUser(userId: number) {
+  return db
+    .select()
+    .from(projects)
+    .innerJoin(projectMembers, eq(projects.id, projectMembers.projectId))
+    .where(eq(projectMembers.userId, userId));
+}
+
 export async function createProject(body: {
   name: string;
   repoUrl: string;
@@ -46,7 +54,7 @@ export async function createProject(body: {
     .execute();
 }
 
-export const projectMembers = pgTable('project_users', {
+export const projectMembers = pgTable('projects_users', {
   projectId: integer('project_id').notNull(),
   userId: integer('user_id').notNull(),
   id: serial('id').primaryKey(),
@@ -54,6 +62,17 @@ export const projectMembers = pgTable('project_users', {
 });
 export type SelectProjectMembers = typeof projectMembers.$inferSelect;
 export const insertProjectMembersSchema = createInsertSchema(projectMembers);
+
+export async function addProjectMember(projectId: number, userId: number) {
+  return db
+    .insert(projectMembers)
+    .values({
+      projectId: projectId,
+      userId: userId,
+      createdAt: new Date().toISOString()
+    })
+    .execute();
+}
 
 export const task = pgTable('tasks', {
   id: serial('id').primaryKey(),
