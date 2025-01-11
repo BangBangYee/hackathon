@@ -20,6 +20,7 @@ export default function MainPage() {
     createdAt: Date;
   }>();
 
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 상태 관리
   const [busPosition, setBusPosition] = useState(200);
   const [direction, setDirection] = useState(1);
 

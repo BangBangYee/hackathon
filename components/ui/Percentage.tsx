@@ -55,9 +55,15 @@ const Percentage = (member: {
             {Math.round(percentage)}%
           </span>
           <Image
-            src="/cute-icon/sleeping-icon.png"
+            src={
+              percentage <= 20
+                ? '/cute-icon/sleeping-icon.png'
+                : percentage <= 80
+                  ? '/cute-icon/working-icon.png'
+                  : '/cute-icon/studying-icon.png'
+            }
             alt="Cute Icon"
-            width={80}
+            width={percentage <= 20 ? 80 : percentage <= 80 ? 60 : 80}
             height={80}
             className="absolute bottom-[-30px] right-[-30px] object-cover"
           />
@@ -74,7 +80,7 @@ const Percentage = (member: {
 
       {/* Checklist Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100">
           <div className="bg-white p-6 rounded-lg w-80">
             <h2 className="text-lg font-bold mb-4">TODO List</h2>
             <ul className="list-none p-0">
