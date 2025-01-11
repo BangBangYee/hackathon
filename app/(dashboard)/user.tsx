@@ -10,10 +10,20 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
+import { createUser, getUsers } from '@/lib/db';
 
 export async function User() {
   let session = await auth();
   let user = session?.user;
+
+  if (user) {
+    if (typeof user.email === 'string' && typeof user.name === 'string') {
+      const users = await getUsers(user.email);
+      if (users.length === 0) {
+        await createUser(user.email, user.name);
+      }
+    }
+  }
 
   return (
     <DropdownMenu>

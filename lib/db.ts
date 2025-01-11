@@ -61,3 +61,19 @@ export async function getTasks(
     .from(task)
     .where(eq(task.userId, userId) && eq(task.projectId, projectId));
 }
+
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull(),
+  name: text('name').notNull()
+});
+export type SelectUsers = typeof users.$inferSelect;
+export const insertUserSchema = createInsertSchema(users);
+
+export async function getUsers(email: string): Promise<SelectUsers[]> {
+  return db.select().from(users).where(eq(users.email, email));
+}
+
+export async function createUser(email: string, name: string) {
+  return db.insert(users).values({ email, name }).execute();
+}
