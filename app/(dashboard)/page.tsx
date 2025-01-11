@@ -87,7 +87,7 @@ export default function MainPage() {
               alt="driver"
               width={70}
               height={70}
-              className="absolute left-1/3 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute left-[510px] transform -translate-x-1/2 -translate-y-1/2"
               style={{ top: `${busPosition - 45}px` }}
             />
           </div>
