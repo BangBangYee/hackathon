@@ -8,11 +8,12 @@ const Percentage = (member: {
   position: string;
   comment: string;
   image: string;
+  task: { id: number; name: string }[];
 }) => {
   const [checkedItems, setCheckedItems] = useState<number[]>([]); // 체크된 항목 관리
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 상태 관리
 
-  const totalItems = 5; // 전체 리스트 항목 수
+  const totalItems = member.task.length; // 전체 리스트 항목 수
   const percentage = (checkedItems.length / totalItems) * 100; // 퍼센트 계산
 
   const handleCheckboxChange = (item: number) => {
@@ -84,19 +85,21 @@ const Percentage = (member: {
           <div className="bg-white p-6 rounded-lg w-80">
             <h2 className="text-lg font-bold mb-4">TODO List</h2>
             <ul className="list-none p-0">
-              {Array.from({ length: totalItems }, (_, index) => (
-                <li key={index} className="mb-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={checkedItems.includes(index)}
-                      onChange={() => handleCheckboxChange(index)}
-                      className="mr-2"
-                    />
-                    Task {index + 1}
-                  </label>
-                </li>
-              ))}
+              {member.task.map((t, index) => {
+                return (
+                  <li key={index} className="mb-2">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={checkedItems.includes(index)}
+                        onChange={() => handleCheckboxChange(index)}
+                        className="mr-2"
+                      />
+                      {t.name}
+                    </label>
+                  </li>
+                );
+              })}
             </ul>
             <button
               onClick={toggleModal}
