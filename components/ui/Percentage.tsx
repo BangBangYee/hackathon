@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Image from 'next/image';
+import usePercentStore from '@/lib/percentage.';
 
 const Percentage = (member: {
   id: number;
@@ -10,6 +11,9 @@ const Percentage = (member: {
   image: string;
   task: { id: number; name: string }[];
 }) => {
+  const setPercentStore = usePercentStore((state) => state.setPercentList);
+  const percentStore = usePercentStore((state) => state.percentList);
+
   const [checkedItems, setCheckedItems] = useState<number[]>([]); // 체크된 항목 관리
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 상태 관리
 
@@ -21,6 +25,17 @@ const Percentage = (member: {
       prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
     );
   };
+
+  useEffect(() => {
+    const index = percentStore.findIndex((p) => p.userId === member.id);
+    if (index === -1) {
+      setPercentStore([...percentStore, { userId: member.id, percentage }]);
+    } else {
+      const newPercentList = [...percentStore];
+      newPercentList[index] = { userId: member.id, percentage };
+      setPercentStore(newPercentList);
+    }
+  }, [checkedItems]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
