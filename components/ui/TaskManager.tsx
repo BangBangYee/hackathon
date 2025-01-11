@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // 팀원과 태스크 타입 정의
 type Member = '영준' | '유빈' | '예원' | '승겸' | '현택';
@@ -6,7 +6,7 @@ type Task = { id: number; name: string; assignedMember: Member | null };
 
 const members: Member[] = ['영준', '유빈', '예원', '승겸', '현택'];
 
-const TaskManager: React.FC = () => {
+const TaskManager = () => {
   const [tasks, setTasks] = useState<Task[]>([
     { id: 1, name: 'UI 디자인 수정', assignedMember: null },
     { id: 2, name: 'API 엔드포인트 개발', assignedMember: null },
@@ -17,7 +17,7 @@ const TaskManager: React.FC = () => {
     { id: 7, name: '리팩토링 계획 수립', assignedMember: null },
     { id: 8, name: 'CI/CD 파이프라인 설정', assignedMember: null },
     { id: 9, name: '코드 리뷰 진행', assignedMember: null },
-    { id: 10, name: '버그 수정 및 핫픽스', assignedMember: null },
+    { id: 10, name: '버그 수정 및 핫픽스', assignedMember: null }
   ]);
 
   const [newTaskName, setNewTaskName] = useState<string>(''); // 새로운 Task 이름 입력값
@@ -39,7 +39,7 @@ const TaskManager: React.FC = () => {
     const newTask: Task = {
       id: tasks.length + 1, // 고유 ID 생성
       name: newTaskName,
-      assignedMember: selectedMember,
+      assignedMember: selectedMember
     };
 
     setTasks((prevTasks) => [...prevTasks, newTask]); // 새로운 Task 추가
@@ -47,14 +47,26 @@ const TaskManager: React.FC = () => {
   };
 
   // 각 팀원별 할당된 Task 목록 생성
-  const tasksByMember = members.reduce<{ [key in Member]: Task[] }>((acc, member) => {
-    acc[member] = tasks.filter((task) => task.assignedMember === member);
-    return acc;
-  }, {} as { [key in Member]: Task[] });
+  const tasksByMember = members.reduce<{ [key in Member]: Task[] }>(
+    (acc, member) => {
+      acc[member] = tasks.filter((task) => task.assignedMember === member);
+      return acc;
+    },
+    {} as { [key in Member]: Task[] }
+  );
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
-      <h1 style={{ marginBottom: '20px', textAlign: 'center' }}>Task Management</h1>
+    <div
+      style={{
+        padding: '20px',
+        maxWidth: '800px',
+        margin: '0 auto',
+        fontFamily: 'Arial, sans-serif'
+      }}
+    >
+      <h1 style={{ marginBottom: '20px', textAlign: 'center' }}>
+        Task Management
+      </h1>
 
       {/* Task 리스트 UI */}
       <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -69,7 +81,7 @@ const TaskManager: React.FC = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
             }}
           >
             <div>
@@ -86,7 +98,7 @@ const TaskManager: React.FC = () => {
                   backgroundColor: task.assignedMember ? '#e0f7fa' : '#f0f0f0',
                   marginRight: '10px',
                   fontSize: '14px',
-                  color: task.assignedMember ? '#00796b' : '#777',
+                  color: task.assignedMember ? '#00796b' : '#777'
                 }}
               >
                 {task.assignedMember ? task.assignedMember : '없음'}
@@ -95,7 +107,9 @@ const TaskManager: React.FC = () => {
               {/* 커스텀 드롭다운 메뉴 */}
               <div style={{ position: 'relative' }}>
                 <select
-                  onChange={(e) => handleAssignMember(task.id, e.target.value as Member)}
+                  onChange={(e) =>
+                    handleAssignMember(task.id, e.target.value as Member)
+                  }
                   value={task.assignedMember || ''}
                   style={{
                     padding: '5px 10px',
@@ -104,7 +118,7 @@ const TaskManager: React.FC = () => {
                     cursor: 'pointer',
                     appearance: 'none',
                     backgroundColor: '#f9f9f9',
-                    outline: 'none',
+                    outline: 'none'
                   }}
                 >
                   <option value="" disabled>
@@ -137,7 +151,7 @@ const TaskManager: React.FC = () => {
             width: '60%',
             marginRight: '10px',
             borderRadius: '5px',
-            border: '1px solid #ddd',
+            border: '1px solid #ddd'
           }}
         />
         <select
@@ -148,7 +162,7 @@ const TaskManager: React.FC = () => {
             borderRadius: '5px',
             border: '1px solid #ddd',
             marginRight: '10px',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
         >
           {members.map((member) => (
@@ -165,7 +179,7 @@ const TaskManager: React.FC = () => {
             border: 'none',
             backgroundColor: '#00796b',
             color: 'white',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
         >
           추가
@@ -183,10 +197,12 @@ const TaskManager: React.FC = () => {
               padding: '10px 15px',
               border: '1px solid #ddd',
               borderRadius: '8px',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
             }}
           >
-            <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{member}</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>
+              {member}
+            </div>
             {tasksByMember[member].length > 0 ? (
               <ul style={{ paddingLeft: '20px', margin: 0 }}>
                 {tasksByMember[member].map((task) => (
