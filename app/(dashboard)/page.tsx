@@ -1,55 +1,33 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { File, PlusCircle } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import { auth } from '@/lib/auth';
+import { Tabs } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { ProductsTable } from './products-table';
-import { getProducts } from '@/lib/db';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-export default async function ProductsPage(
-  props: {
-    searchParams: Promise<{ q: string; offset: string }>;
-  }
-) {
-  const searchParams = await props.searchParams;
-  const search = searchParams.q ?? '';
-  const offset = searchParams.offset ?? 0;
-  const { products, newOffset, totalProducts } = await getProducts(
-    search,
-    Number(offset)
-  );
+export default async function MainPage() {
+  let session = await auth();
+  let user = session?.user;
+
+  console.log(user);
 
   return (
     <Tabs defaultValue="all">
       <div className="flex items-center">
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="draft">Draft</TabsTrigger>
-          <TabsTrigger value="archived" className="hidden sm:flex">
-            Archived
-          </TabsTrigger>
-        </TabsList>
-        <div className="ml-auto flex items-center gap-2">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <File className="h-3.5 w-3.5" />
+        <div className="ml-auto flex items-center gap-2"></div>
+      </div>
+      <div className="grid w-full max-w-sm items-center gap-1.5">
+        <Label htmlFor="project title">프로젝트를 등록해주세요!</Label>
+        <div className="flex w-full max-w-sm items-center space-x-2">
+          <Input type="url" placeholder="프로젝트 Github URL" />
+          <Button type="submit" className="gap-1">
+            <Plus className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Export
-            </span>
-          </Button>
-          <Button size="sm" className="h-8 gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Product
+              Add Project
             </span>
           </Button>
         </div>
       </div>
-      <TabsContent value="all">
-        <ProductsTable
-          products={products}
-          offset={newOffset ?? 0}
-          totalProducts={totalProducts}
-        />
-      </TabsContent>
     </Tabs>
   );
 }
