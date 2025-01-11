@@ -89,6 +89,25 @@ export default function MainPage() {
               style={{ top: `${busPosition - 45}px` }}
             />
           </div>
+
+          <div className="flex-1 bg-gray-200 rounded-full h-4 mt-3">
+            <div
+              className="h-4 rounded-full bg-purple-500 z-20"
+              style={{
+                width: `${(new Date().getTime() / new Date(project?.endAt).getTime() / 10) * 100}%`
+              }}
+            ></div>
+          </div>
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <p>시작일</p>
+              <p>{new Date(project.createdAt).toLocaleDateString()}</p>
+            </div>
+            <div className="flex flex-col">
+              <p>종료일</p>
+              <p>{new Date(project.endAt).toLocaleDateString()}</p>
+            </div>
+          </div>
         </div>
       ) : (
         <ProjectForm />
