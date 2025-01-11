@@ -41,3 +41,23 @@ export const projectMembers = pgTable('project_users', {
 });
 export type SelectProjectMembers = typeof projectMembers.$inferSelect;
 export const insertProjectMembersSchema = createInsertSchema(projectMembers);
+
+export const task = pgTable('tasks', {
+  id: serial('id').primaryKey(),
+  projectId: integer('project_id').notNull(),
+  userId: integer('user_id').notNull(),
+  title: text('title').notNull(),
+  status: statusEnum('status').notNull(),
+  createdAt: timestamp('created_at').notNull()
+});
+export type SelectTasks = typeof task.$inferSelect;
+export const insertTaskSchema = createInsertSchema(task);
+export async function getTasks(
+  userId: number,
+  projectId: number
+): Promise<SelectTasks[]> {
+  return db
+    .select()
+    .from(task)
+    .where(eq(task.userId, userId) && eq(task.projectId, projectId));
+}
