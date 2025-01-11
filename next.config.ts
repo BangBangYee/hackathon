@@ -1,5 +1,9 @@
 export default {
   images: {
+    domains: [
+      'avatars.githubusercontent.com',
+      '*.public.blob.vercel-storage.com'
+    ],
     remotePatterns: [
       {
         protocol: 'https',
