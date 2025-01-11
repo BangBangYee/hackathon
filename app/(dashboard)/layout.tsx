@@ -66,15 +66,11 @@ function DesktopNav() {
           <VercelLogo className="h-3 w-3 transition-all group-hover:scale-110" />
         </Link>
 
-        <NavItem href="#" label="Dashboard">
+        <NavItem href="/" label="Dashboard">
           <Home className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="/" label="Products">
-          <Package className="h-5 w-5" />
-        </NavItem>
-
-        <NavItem href="/customers" label="Customers">
+        <NavItem href="/users" label="Customers">
           <Users2 className="h-5 w-5" />
         </NavItem>
 
