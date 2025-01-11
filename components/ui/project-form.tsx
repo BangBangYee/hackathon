@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { cn } from '@/lib/utils';
-import { toast } from '@/components/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -24,38 +23,103 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 const FormSchema = z.object({
-  dob: z.date({
+  name: z.string({
+    required_error: '프로젝트명은 필수값입니다.'
+  }),
+  description: z.string({
+    required_error: '프로젝트 설명은 필수값입니다.'
+  }),
+  repoUrl: z.string({
+    required_error: '프로젝트 Github Repo URL은 필수값입니다.'
+  }),
+  endAt: z.date({
     required_error: '종료일은 필수값입니다.'
   })
 });
 
-export function CalendarForm() {
+function onSubmit(data: z.infer<typeof FormSchema>) {
+  fetch('/api/projects', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      data
+    })
+  }).then((res) => {
+    if (res.ok) {
+      alert('프로젝트가 등록되었습니다.');
+    }
+  });
+}
+
+export function ProjectForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema)
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      )
-    });
-  }
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <Label htmlFor="project title" className="text-lg">
+          프로젝트를 등록해주세요
+        </Label>
+        <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
+          <FormField
+            control={form.control}
+            name="name"
+            defaultValue={''}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>프로젝트명 *</FormLabel>
+                <FormControl>
+                  <Input type="text" placeholder="프로젝트명" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            defaultValue={''}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>프로젝트 설명</FormLabel>
+                <FormControl>
+                  <Input type="text" placeholder="프로젝트 설명" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="repoUrl"
+            defaultValue={''}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>프로젝트 Github Repo URL *</FormLabel>
+                <FormControl>
+                  <Input
+                    type="url"
+                    placeholder="프로젝트 Github Repo URL"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
-          name="dob"
+          name="endAt"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>프로젝트 종료일</FormLabel>
+              <FormLabel>프로젝트 종료일 *</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

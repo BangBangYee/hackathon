@@ -23,8 +23,8 @@ export const projects = pgTable('projects', {
   name: text('name').notNull(),
   description: text('description'),
   status: statusEnum('status').notNull(),
-  endAt: timestamp('end_at').notNull(),
-  createdAt: timestamp('created_at').notNull()
+  endAt: timestamp('end_at', { mode: 'string' }).notNull(),
+  createdAt: timestamp('created_at', { mode: 'string' }).notNull()
 });
 export type SelectProjects = typeof projects.$inferSelect;
 export const insertProjectSchema = createInsertSchema(projects);
@@ -33,11 +33,24 @@ export async function getProjects(id: number): Promise<SelectProjects[]> {
   return db.select().from(projects).where(eq(projects.id, id));
 }
 
+export async function createProject(body: {
+  name: string;
+  repoUrl: string;
+  description: string;
+  endAt: string;
+  createdAt: string;
+}) {
+  return db
+    .insert(projects)
+    .values({ ...body, status: 'active' })
+    .execute();
+}
+
 export const projectMembers = pgTable('project_users', {
   projectId: integer('project_id').notNull(),
   userId: integer('user_id').notNull(),
   id: serial('id').primaryKey(),
-  createdAt: timestamp('created_at').notNull()
+  createdAt: timestamp('created_at', { mode: 'string' }).notNull()
 });
 export type SelectProjectMembers = typeof projectMembers.$inferSelect;
 export const insertProjectMembersSchema = createInsertSchema(projectMembers);
@@ -48,7 +61,7 @@ export const task = pgTable('tasks', {
   userId: integer('user_id').notNull(),
   title: text('title').notNull(),
   status: statusEnum('status').notNull(),
-  createdAt: timestamp('created_at').notNull()
+  createdAt: timestamp('created_at', { mode: 'string' }).notNull()
 });
 export type SelectTasks = typeof task.$inferSelect;
 export const insertTaskSchema = createInsertSchema(task);
