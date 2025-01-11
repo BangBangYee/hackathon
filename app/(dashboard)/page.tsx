@@ -20,7 +20,6 @@ export default function MainPage() {
     createdAt: Date;
   }>();
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 상태 관리
   const [busPosition, setBusPosition] = useState(200);
   const [direction, setDirection] = useState(1);
 
@@ -90,6 +89,38 @@ export default function MainPage() {
               height={70}
               className="absolute left-[510px] transform -translate-x-1/2 -translate-y-1/2"
               style={{ top: `${busPosition - 45}px` }}
+            />
+            <Image
+              src="/bird/bird2.png"
+              alt="bird2"
+              width={70}
+              height={70}
+              className="absolute left-[670px] transform -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${busPosition - 45}px` }}
+            />
+            <Image
+              src="/bird/bird3.png"
+              alt="bird3"
+              width={70}
+              height={70}
+              className="absolute left-[830px] transform -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${busPosition - 45}px` }}
+            />
+            <Image
+              src="/bird/bird4.png"
+              alt="bird4"
+              width={70}
+              height={70}
+              className="absolute left-[990px] transform -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${busPosition - 45}px` }}
+            />
+            <Image
+              src="/bird/pm.png"
+              alt="pm"
+              width={70}
+              height={70}
+              className="absolute left-[1300px] transform -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${busPosition + 45}px` }}
             />
           </div>
 
