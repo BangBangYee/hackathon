@@ -18,6 +18,9 @@ export default function MainPage() {
     createdAt: Date;
   }>();
 
+  const [busPosition, setBusPosition] = useState(200);
+  const [direction, setDirection] = useState(1);
+
   useEffect(() => {
     fetch('/api/projects', {
       method: 'GET',
@@ -30,6 +33,23 @@ export default function MainPage() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBusPosition((prev) => {
+        if (prev >= 210) {
+          setDirection(-1); // 방향을 위로 변경
+          return prev - 1; // 감소
+        } else if (prev <= 190) {
+          setDirection(1); // 방향을 아래로 변경
+          return prev + 1; // 증가
+        }
+        return prev + direction; // 현재 방향에 따라 값 업데이트
+      });
+    }, 15); // 0.1초 간격으로 업데이트
+
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 interval 정리
+  }, [direction]);
 
   return (
     <Tabs defaultValue="all">
@@ -57,7 +77,16 @@ export default function MainPage() {
               alt="bus"
               width={700}
               height={100}
-              className="absolute left-1/2 top-[200px] transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${busPosition}px` }} // 동적으로 top 값 설정
+            />
+            <Image
+              src="/bird/driver1.png"
+              alt="driver"
+              width={70}
+              height={70}
+              className="absolute left-1/3 transform -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${busPosition - 45}px` }}
             />
           </div>
         </div>
