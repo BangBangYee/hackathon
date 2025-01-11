@@ -44,7 +44,7 @@ function DesktopNav() {
           <Home className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="Analytics">
+        <NavItem href="/admin" label="Admin">
           <LineChart className="h-5 w-5" />
         </NavItem>
       </nav>
