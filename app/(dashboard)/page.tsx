@@ -34,18 +34,31 @@ export default function MainPage() {
   return (
     <Tabs defaultValue="all">
       {project ? (
-        <div className="space-y-2">
-          <Label className="text-3xl">{project.name}</Label>
-          <div className="flex gap-3">
+        <div className="flex flex-col">
+          <div className="space-y-2">
+            <Label className="text-3xl">{project.name}</Label>
+            <div className="flex gap-3">
+              <Image
+                src="/time-clock.png"
+                alt="time-clock"
+                width={24}
+                height={24}
+              />
+              <Button className="rounded-full bg-purple-500" disabled>
+                {new Date(project?.endAt).getDate() - new Date().getDate()} days
+              </Button>
+            </div>
+          </div>
+
+          <div className="w-fill h-96 relative mt-10">
+            <Image src="/bus-bg.png" alt="bus-bg" fill />
             <Image
-              src="/time-clock.png"
-              alt="time-clock"
-              width={24}
-              height={24}
+              src="/bus.png"
+              alt="bus"
+              width={700}
+              height={100}
+              className="absolute left-1/2 top-[200px] transform -translate-x-1/2 -translate-y-1/2"
             />
-            <Button className="rounded-full bg-purple-500" disabled>
-              {new Date(project?.endAt).getDate() - new Date().getDate()} days
-            </Button>
           </div>
         </div>
       ) : (
