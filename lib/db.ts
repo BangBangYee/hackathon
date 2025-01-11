@@ -18,6 +18,27 @@ export const db = drizzle(neon(process.env.POSTGRES_URL!));
 
 export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived']);
 
+export const projects = pgTable('projects', {
+  id: serial('id').primaryKey(),
+  repoUrl: text('repo_url').notNull(),
+  name: text('name').notNull(),
+  description: text('description'),
+  status: statusEnum('status').notNull(),
+  userId: integer('user_id').notNull(),
+  createdAt: timestamp('created_at').notNull()
+})
+export type SelectProjects = typeof projects.$inferSelect;
+export const insertProjectSchema = createInsertSchema(projects);
+
+export async function getProjects(id: number): Promise<SelectProjects[]>{
+  return db.select().from(projects).where(eq(projects.id, id));
+}
+
+export async function getProjectsByUserId(userId: number): Promise<SelectProjects[]>{
+  return db.select().from(projects).where(eq(projects.userId, userId));
+}
+
+
 export const products = pgTable('products', {
   id: serial('id').primaryKey(),
   imageUrl: text('image_url').notNull(),
